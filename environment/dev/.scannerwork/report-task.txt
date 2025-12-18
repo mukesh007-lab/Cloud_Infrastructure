@@ -1,0 +1,6 @@
+projectKey=infra
+serverUrl=http://localhost:9000
+serverVersion=9.9.4.87374
+dashboardUrl=http://localhost:9000/dashboard?id=infra
+ceTaskId=AZsZFtJ_Wis-LkEn3XvB
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AZsZFtJ_Wis-LkEn3XvB
