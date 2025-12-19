@@ -1,0 +1,47 @@
+trigger:
+- main
+pool: Newpool
+stages:
+  - stage: init
+    jobs:
+      - job: Terraforminit
+        displayName: Init
+        steps:
+        - task: TerraformTask@5
+          displayName: terraform init
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+            backendServiceArm: 'testconnectionservice'
+            backendAzureRmStorageAccountName: 'infrastorageacct007'
+            backendAzureRmContainerName: 'infracontainer07'
+            backendAzureRmKey: 'terraform.tfstate'
+        - task: TerraformTask@5
+          displayName: terraform validate
+          inputs:
+            provider: 'azurerm'
+            command: 'validate'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+        - task: TerraformTask@5
+          displayName: terraform plan
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+            environmentServiceNameAzureRM: 'testconnectionservice'
+
+  - stage: linting
+    jobs:
+      - job: linting
+        displayName: linting
+        steps:
+        - task: tfsec@1
+          displayName: tfsec
+          continueOnError: true
+          inputs:
+            version: 'v1.26.0'
+            args: 'tfsec'
+            dir: '$(System.DefaultWorkingDirectory)/environment/dev'
+            
+
